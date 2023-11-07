@@ -30,14 +30,45 @@ resources = {
     "coffee": 100,
 }
 
-print(MENU["espresso"]["ingredients"]["water"])
-print(MENU["espresso"]["cost"])
+quarters = 0.25
+dimes = 0.10
+nickles = 0.05
+pennies = 0.01
 
-# TODO: 1 prompt user What would you like? (espresso/latte/cappuccino):
-# TODO: 2 exit if the user types "off"
-# TODO: 3 print report of resources and profit with "report"
-# TODO: 4 check resources after being prompted for drink
-# TODO: 5 process coins - "insert coins, quarters etc"
-# TODO: 6 check money, if !enough, refund and exit. if ok add to profit
-# TODO: 7 calculate change
-# TODO: 8 make coffee - deduct resources, “Here is your latte. Enjoy!”
+def check_resources(drink):
+    water = MENU[drink]["ingredients"]["water"]
+    coffee = MENU[drink]["ingredients"]["coffee"]
+    if drink != "espresso":
+       milk = MENU[drink]["ingredients"]["coffee"]
+    else:
+        milk = 0
+
+    if water > resources["water"]:
+        return "water"
+    elif coffee > resources["coffee"]:
+        return "coffee"
+    elif milk > resources["milk"]:
+        return "milk"
+    else:
+        return True
+
+# print(MENU["espresso"]["ingredients"]["water"])
+# print(MENU["espresso"]["cost"])
+
+# prompt user.
+choice = input("What would you like? (espresso/latte/cappuccino): ")
+
+# TODO: 4. check resources after being prompted for drink
+item = check_resources(choice)
+if item != True:
+    print(f"Sorry there is not enough {item}.")
+
+
+
+
+# TODO: 5. process coins - "insert coins, quarters etc"
+# TODO: 6. check money, if !enough, refund and exit. if ok add to profit
+# TODO: 7. calculate change
+# TODO: 8. make coffee - deduct resources, “Here is your latte. Enjoy!”
+# TODO: 2. exit if the user types "off"
+# TODO: 3. print report of resources and profit with "report"
