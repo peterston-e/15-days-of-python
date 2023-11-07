@@ -65,31 +65,40 @@ while make_coffee == True:
     # prompt user for drink.
     choice = input(" What would you like? (espresso/latte/cappuccino): ")
 
-    # check resources after being prompted for drink
-    item = check_resources(choice)
-    if item != "enough":
-        print(f"Sorry there is not enough {item}.")
-
-    # process coins - "insert coins, quarters etc"
-    print("Please insert coins")
-    total_dollars = 0
-    for coin in currency:
-        num_coin = int(input(f"how many {coin}: "))
-        total_dollars += num_coin * currency[coin]
-
-# print(f"test - {'{0:.2f}'.format(total_dollars)}") ## .format() returns a string though
-
-# TODO: 6. check money, if !enough, refund and exit. if ok add to profit
-    price_of_drink = MENU[choice]["cost"]
-    if total_dollars < price_of_drink:
-        print("Sorry that's not enough money. Money refunded.")
+    if choice == "report":
+        print(f"Water: {resources["water"]}ml")
+        print(f"Milk: {resources["milk"]}ml")
+        print(f"Coffee: {resources["coffee"]}ml")
+        print(f"Money: ${'{0:.2f}'.format(profit)}")
+    elif choice == "off":
+        make_coffee = False
     else:
-        profit += price_of_drink
-        change = total_dollars - price_of_drink
-        print(f"Here is ${change} in change.")
-        print(f"Here is your {choice} ☕ . Enjoy!")
+        # check resources after being prompted for drink
+        item = check_resources(choice)
+        if item != "enough":
+            print(f"Sorry there is not enough {item}.")
+
+        # process coins - "insert coins, quarters etc"
+        print("Please insert coins")
+        total_dollars = 0
+        for coin in currency:
+            num_coin = int(input(f"how many {coin}: "))
+            total_dollars += num_coin * currency[coin]
+
+    # print(f"test - {'{0:.2f}'.format(profit)}") ## .format() returns a string though
+
+    # TODO: 6. check money, if !enough, refund and exit. if ok add to profit
+        price_of_drink = MENU[choice]["cost"]
+        if total_dollars < price_of_drink:
+            print("Sorry that's not enough money. Money refunded.")
+        else:
+            profit += price_of_drink
+            change = total_dollars - price_of_drink
+            print(f"Here is ${change} in change.")
+            print(f"Here is your {choice} ☕ . Enjoy!")
+            resources["water"] -= MENU[choice]["ingredients"]["water"]
+            resources["coffee"] -= MENU[choice]["ingredients"]["coffee"]
+            if choice != "espresso":
+                resources["milk"] -= MENU[choice]["ingredients"]["milk"]
 
 
-# TODO: 8. make coffee - deduct resources, “Here is your latte. Enjoy!”
-# TODO: 2. exit if the user types "off"
-# TODO: 3. print report of resources and profit with "report"
