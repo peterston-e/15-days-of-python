@@ -39,6 +39,7 @@ currency = {
 
 profit = 0
 
+
 def check_resources(drink):
     water = MENU[drink]["ingredients"]["water"]
     coffee = MENU[drink]["ingredients"]["coffee"]
@@ -54,32 +55,41 @@ def check_resources(drink):
     elif milk > resources["milk"]:
         return "milk"
     else:
-        return True
+        return "enough"
 
 
 # print(MENU["espresso"]["ingredients"]["water"])
 # print(MENU["espresso"]["cost"])
+make_coffee = True
+while make_coffee == True:
+    # prompt user for drink.
+    choice = input(" What would you like? (espresso/latte/cappuccino): ")
 
-# prompt user for drink.
-choice = input("What would you like? (espresso/latte/cappuccino): ")
+    # check resources after being prompted for drink
+    item = check_resources(choice)
+    if item != "enough":
+        print(f"Sorry there is not enough {item}.")
 
-# check resources after being prompted for drink
-item = check_resources(choice)
-if item != True:
-    print(f"Sorry there is not enough {item}.")
+    # process coins - "insert coins, quarters etc"
+    print("Please insert coins")
+    total_dollars = 0
+    for coin in currency:
+        num_coin = int(input(f"how many {coin}: "))
+        total_dollars += num_coin * currency[coin]
 
-# process coins - "insert coins, quarters etc"
-print("Please insert coins")
-total_dollars = 0
-for coin in currency:
-    num_coin = int(input(f"how many {coin}: "))
-    total_dollars += num_coin * currency[coin]
-
-# print(f"test - {'{0:.2f}'.format(total_dollars)}")
+# print(f"test - {'{0:.2f}'.format(total_dollars)}") ## .format() returns a string though
 
 # TODO: 6. check money, if !enough, refund and exit. if ok add to profit
-profit += total_dollars
-# TODO: 7. calculate change
+    price_of_drink = MENU[choice]["cost"]
+    if total_dollars < price_of_drink:
+        print("Sorry that's not enough money. Money refunded.")
+    else:
+        profit += price_of_drink
+        change = total_dollars - price_of_drink
+        print(f"Here is ${change} in change.")
+        print(f"Here is your {choice} ☕ . Enjoy!")
+
+
 # TODO: 8. make coffee - deduct resources, “Here is your latte. Enjoy!”
 # TODO: 2. exit if the user types "off"
 # TODO: 3. print report of resources and profit with "report"
